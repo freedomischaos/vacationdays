@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title id="page-title">Loading…</title>
+  <link rel="stylesheet" href="/css/styles.css" type="text/css" />
+</head>
+
+<body>
+  <!-- BOARD NAME DISPLAY -->
+  <header>
+    <div class="header-left">
+      <!-- + Add Board (redirects to “/”) -->
+      <button onclick="window.location.href='/'" class="submit-button">+ Add Board</button>
+      <!-- Delete Board -->
+      <button id="delete-board-button" class="delete-button">Delete Board</button>
+    </div>
+    <div class="header-center">
+      <!-- Board title -->
+      <h1 id="board-title">Loading…</h1>
+      <button id="add-day" class="submit-button">+ Add Day</button>
+    </div>
+    <div class="header-right">
+      <!-- Theme toggle remains on the far right -->
+      <button id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+    </div>
+  </header>
+
+  <!-- MAIN BOARD AREA (columns will be rendered) -->
+  <main>
+    <div class="board">
+      <!-- renderTasks.js will insert existing day‐columns here -->
+      <!-- (no “add-day” button here anymore) -->
+    </div>
+  </main>
+
+  <!-- TOAST -->
+  <div id="toast" class="toast" hidden></div>
+
+  <!-- ---------------------------------------------------------------- -->
+  <!-- DAY MODAL -->
+  <!-- ---------------------------------------------------------------- -->
+
+  <!-- ADD DAY MODAL -->
+  <div id="add-day-modal" class="modal" style="display: none">
+    <div class="modal-content range-container">
+      <h2>Add Day(s)</h2>
+      <form id="add-day-form" class="task-form">
+        <!-- Start Date -->
+        <label for="add-day-date-start">Start Date</label>
+        <input 
+          type="date" 
+          id="add-day-date-start" 
+          class="boardName-input"
+        />
+
+        <!-- Toggle for using a range -->
+        <label for="toggle-range" class="toggle-label">
+          <input type="checkbox" id="toggle-range" />
+          <span>Use date range</span>
+        </label>
+
+        <!-- End Date (hidden until “Use date range” is checked) -->
+        <div id="add-day-date-range" class="range-container">
+          <label for="add-day-date-end">End Date</label>
+          <input type="date" id="add-day-date-end" class="boardName-input" />
+        </div>
+
+        <div class="modal-buttons" style="margin-top: 1rem;">
+          <button type="button" class="cancel-button" onclick="closeAddDayModal()">Cancel</button>
+          <button type="submit" class="submit-button">Add</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- DELETE DAY CONFIRMATION MODAL -->
+  <div id="delete-column-modal" class="modal" style="display: none">
+    <div class="modal-content delete-confirmation">
+      <div class="modal-header">
+        <h2>Delete Day</h2>
+      </div>
+      <div class="delete-warning">
+        <p>This will remove this day and all its tasks.</p>
+        <p>This action cannot be undone.</p>
+      </div>
+      <div class="modal-buttons">
+        <button type="button"
+                class="cancel-button"
+                data-action="close-delete-day">
+          Cancel
+        </button>
+        <button type="button"
+                id="confirm-delete-day-btn"
+                class="delete-button">
+          Delete Day
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ---------------------------------------------------------------- -->
+  <!-- TASK MODAL -->
+  <!-- ---------------------------------------------------------------- -->
+
+  <!-- TASK MODAL (unchanged) -->
+  <div id="task-modal" class="modal" style="display: none">
+    <div class="modal-content">
+      <h2 id="task-modal-title">Add Task</h2>
+      <form id="task-form" class="task-form">
+        <textarea 
+          id="task-input" 
+          placeholder="What needs to be done?" 
+          rows="3" 
+          maxlength="500"
+          required
+        ></textarea>
+        <div class="modal-buttons">
+          <button type="button" class="cancel-button" onclick="closeTaskModal()">Cancel</button>
+          <button type="button" id="delete-task-btn" class="delete-button" style="display: none;">Delete Task</button>
+          <button type="submit" class="submit-button">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- DELETE TASK CONFIRMATION MODAL (new) -->
+  <div id="delete-task-modal" class="modal" style="display: none">
+    <div class="modal-content delete-confirmation">
+      <div class="modal-header">
+        <h2>Delete Task</h2>
+      </div>
+      <div class="delete-warning">
+        <p>This action cannot be undone. This will permanently delete the selected task.</p>
+      </div>
+      <div class="modal-buttons">
+        <button type="button" class="cancel-button" onclick="closeDeleteTaskModal()">Cancel</button>
+        <button type="button" id="confirm-delete-task-btn" class="delete-button">Delete Task</button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- ---------------------------------------------------------------- -->
+  <!-- BOARD MODAL -->
+  <!-- ---------------------------------------------------------------- -->
+
+  <!-- DELETE BOARD CONFIRMATION MODAL -->
+  <div id="delete-board-modal" class="modal" style="display: none">
+    <div class="modal-content delete-confirmation">
+      <div class="modal-header">
+        <h2>Delete Board</h2>
+        <button class="close-button" data-action="close-modal">×</button>
+      </div>
+      <div class="delete-warning">
+        <p>This action cannot be undone. This will permanently delete the <strong id="delete-board-name"></strong> board and all its tasks.</p>
+        <p>Please type <strong id="delete-board-confirm-text"></strong> to confirm.</p>
+      </div>
+      <form id="delete-board-form" class="delete-confirmation-form">
+        <input
+          type="text"
+          id="delete-board-input"
+          placeholder="Type board name to confirm"
+          class="delete-confirmation-input"
+          required
+        >
+        <div class="modal-buttons">
+          <button type="button" class="cancel-button" data-action="close-modal">Cancel</button>
+          <button type="submit" id="confirm-delete-btn" class="delete-button">Delete Board</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+
+  <!-- JS FILES -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/initBoard.js"        defer></script>
+  <script src="/js/utils.js"             defer></script>
+  <script src="/js/api.js"               defer></script>
+  <script src="/js/renderTasks.js"       defer></script>
+  <script src="/js/boardSelector.js"     defer></script>
+  <script src="/js/taskModal.js"         defer></script>
+  <script src="/js/createTask.js"        defer></script>
+  <script src="/js/boardManagement.js"   defer></script>
+  <script src="/js/theme.js"             defer></script>
+  <script src="/js/headerButtons.js"     defer></script>
+</body>
+</html>

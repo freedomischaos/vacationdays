@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Join or Create Board</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <style>
+    /* Ensure the page’s content is centered vertically & horizontally */
+    body, html {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .join-container {
+      background: var(--container);
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+    .join-container h1 {
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+      font-size: 1.75rem;
+    }
+    .join-form input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      border: 2px solid var(--border);
+      border-radius: var(--border-radius);
+      background: var(--container);
+      color: var(--text);
+      margin-bottom: 1rem;
+      box-sizing: border-box;
+      transition: border-color var(--transition);
+    }
+    .join-form input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    .join-form .submit-button {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: background-color var(--transition);
+    }
+    .join-form .submit-button:hover {
+      background: var(--primary-hover);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Top bar with just the theme toggle, no absolute positioning -->
+  <header>
+    <div class="header-left"></div>
+    <div class="header-center">
+      <!-- <h1>Select or Create Board</h1> -->
+    </div>
+    <div class="header-right">
+      <button id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="join-container">
+      <h1>Join or Create Board</h1>
+      <form id="join-form" class="join-form">
+        <input
+          type="text"
+          id="join-board-input"
+          placeholder="Enter board name"
+          pattern="[A-Za-z0-9 \-]+"
+          title="Letters, numbers, spaces, and hyphens only"
+          required
+        />
+        <button type="submit" class="submit-button">
+          Continue
+        </button>
+      </form>
+      <p id="join-error" style="display: none; color: #f44336; font-size: 0.9rem; margin-top: 1rem;">
+        Invalid board name. Use letters, numbers, spaces or hyphens.
+      </p>
+    </div>
+  </main>
+
+  <!-- Toast container (reused style) -->
+  <div id="toast" class="toast" hidden></div>
+
+  <script src="/js/joinOrCreate.js" defer></script>
+  <script src="/js/utils.js"          defer></script>
+  <script src="/js/theme.js"          defer></script>
+</body>
+</html>

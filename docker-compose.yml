@@ -1,0 +1,14 @@
+services:
+  vacationdays:
+#    image: freedomischaos/vacationdays:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - vacationdays-data:/app/data/
+    ports:
+      - 59060:3000
+networks: {}
+volumes:
+  vacataiondays-data: null

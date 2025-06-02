@@ -1,0 +1,20 @@
+{
+  "name": "test",
+  "columns": {
+    "2025-06-02": {
+      "name": "Monday, 2nd of June 2025",
+      "tasks": []
+    },
+    "2025-06-04": {
+      "name": "Wednesday, 4th of June 2025",
+      "tasks": [
+        "testttt",
+        "dinner"
+      ]
+    },
+    "2025-06-07": {
+      "name": "Saturday, 7th of June 2025",
+      "tasks": []
+    }
+  }
+}

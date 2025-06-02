@@ -1,0 +1,9 @@
+{
+  "boards": {
+    "vacation": {
+      "name": "Vacation Week",
+      "columns": {}
+    }
+  },
+  "activeBoard": "vacation"
+}
