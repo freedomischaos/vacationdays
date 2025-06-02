@@ -341,7 +341,7 @@ body.dark-theme h1 {
 
 /* Make End Date appear vertically under Start Date */
 .range-container {
-    /*display: flex;*/
+    display: flex;
     flex-direction: column; /* stack vertically */
     align-items: center;
     justify-content: center;
