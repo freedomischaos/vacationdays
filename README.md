@@ -20,7 +20,7 @@ Design is intended to be temporary with some minor security by obscurity practic
 
 ## Docker Compose
 ```
-YES EVENTUALLY
+YES, but locally built
 ```
 
 ## Further Ideas
