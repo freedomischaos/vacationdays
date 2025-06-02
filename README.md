@@ -19,8 +19,11 @@ Design is intended to be temporary with some minor security by obscurity practic
 - Columns should be each day (Monday, Tuesday, Wednesday)
 
 ## Docker Compose
+Checkout repo
+
 ```
-YES, but locally built
+docker-compose build
+docker-compose up -d
 ```
 
 ## Further Ideas
