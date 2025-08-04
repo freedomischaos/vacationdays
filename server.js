@@ -246,6 +246,7 @@ const io = new Server(httpServer, {
 });
 
 io.on("connection", (socket) => {
+  const ipAddress = socket.handshake.address;
   console.log(`Socket.IO client connected: ${socket.id} from IP: ${ipAddress}` );
 });
 
