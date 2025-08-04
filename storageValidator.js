@@ -10,6 +10,9 @@ const path = require("path");
  * - Verifies that `data/defaultData.json` exists and is readable (R_OK).
  * - Throws if any check fails.
  */
+
+const MAX_FILE_SIZE_BYTES = 1 * 1024 * 1024; // 1 MB
+
 async function validateStorageRead() {
   const dataDir     = path.join(__dirname, "data");
   const defaultFile = path.join(dataDir, "defaultData.json");
@@ -27,14 +30,44 @@ async function validateStorageRead() {
     throw new Error(`Storage-read check failed: "${dataDir}" exists but is not a directory.`);
   }
 
+
   // 2) Check that 'defaultData.json' exists and is readable
+  let defaultFileStats;
+  try {
+    // First, get file stats to check existence, type, and size
+    defaultFileStats = await fs.stat(defaultFile);
+  } catch (statErr) {
+    throw new Error(
+      `Storage-read check failed: "${defaultFile}" is not accessible or does not exist (${statErr.message}).`
+    );
+  }
+
+  // Verify it's actually a file
+  if (!defaultFileStats.isFile()) {
+    throw new Error(
+      `Storage-read check failed: "${defaultFile}" exists but is not a file.`
+    );
+  }
+
+  // Verify readability (redundant if fs.stat succeeded, but good for explicit check)
   try {
     await fs.access(defaultFile, fs.constants.R_OK);
   } catch (accessErr) {
     throw new Error(
-      `Storage-read check failed: "${defaultFile}" is not readable or does not exist (${accessErr.message}).`
+      `Storage-read check failed: "${defaultFile}" exists but is not readable (${accessErr.message}).`
     );
   }
+
+  // Check file size
+  if (defaultFileStats.size > MAX_FILE_SIZE_BYTES) {
+    throw new Error(
+      `Storage-read check failed: "${defaultFile}" size (${(
+        defaultFileStats.size /
+        (1024 * 1024)
+      ).toFixed(2)} MB) exceeds 1MB limit.`
+    );
+  }
+  
 
   // If we reach here, both checks passed
   return;
