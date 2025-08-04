@@ -246,7 +246,7 @@ const io = new Server(httpServer, {
 });
 
 io.on("connection", (socket) => {
-  console.log(`Socket.IO client connected: ${socket.id}`);
+  console.log(`Socket.IO client connected: ${socket.id} from IP: ${ipAddress}` );
 });
 
 // ──────────────────────────────────────────────────────────────────────────────
